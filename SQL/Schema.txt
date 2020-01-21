@@ -1,0 +1,54 @@
+CREATE TABLE housing (
+Parcel int Primary key, 
+Bedrooms INT,
+Bathrooms int,
+Living_area int,
+Total_Value int,
+Half_Baths int,
+House_Age int,
+Construction_Quality varchar,
+Address2 Varchar,
+Condition_Score Varchar,
+Garage_Type Varchar,
+Finished_Basement varchar,
+Total_Land int,
+First_Sale_Age int,
+First_Sale_Price int,
+Second_Sale_Age int,
+Second_Sale_Price int
+);
+
+
+select * from housing
+
+drop table full_data
+
+CREATE TABLE full_data (
+Parcel int, 
+Bedrooms int,
+Bathrooms int,
+Living_area int,
+Total_Value int,
+Half_Baths int,
+Purchase_Date int,
+Construction_Quality varchar,
+Address1 varchar,
+Address2 Varchar,
+Condition_Score Varchar,
+Garage_Type Varchar,
+Finished_Basement varchar,
+Total_Land int,
+First_Sale_Date varchar,
+First_Sale_Price int,
+Second_Sale_Date varchar,
+Second_Sale_Price int
+);
+
+
+select *, right(Address2, 5) as Zipcodes, right(first_sale_date, 4) as first_sale_year, right(second_sale_date, 4) as second_sale_year, 2020 - purchase_date as House_Age
+from full_data
+
+ALTER TABLE full_data
+  DROP COLUMN Address1;
+
+
