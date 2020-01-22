@@ -1,0 +1,668 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import matplotlib.image as mpimg \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data = pd.read_csv('data/The_Actual_Final_Dataset2.csv')\n",
+    "data.fillna('No')\n",
+    "data.head()\n",
+    "data= data[data['Inflation_Adj_Cost1'] != 0]\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index(['parcel', 'bedrooms', 'bathrooms', 'living_area', 'total_value',\n",
+       "       'half_baths', 'construction_quality', 'condition_score', 'garage_type',\n",
+       "       'finished_basement_No', 'total_land', 'zipcodes', 'house_age',\n",
+       "       'Inflation_Adj_Cost1', 'Inflation_Adj_Cost2'],\n",
+       "      dtype='object')"
+      ]
+     },
+     "execution_count": 21,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [],
+   "source": [
+    "#data2 = pd.get_dummies(data)\n",
+    "#data2.head()\n",
+    "#data2['Inflation_Adj_Cost1']= data2['Inflation_Adj_Cost1'].astype('int')\n",
+    "#data2['Inflation_Adj_Cost2']= data2['Inflation_Adj_Cost2'].astype('int')\n",
+    "\n",
+    "\n",
+    "#data2"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(7988, 11) (7988, 1)\n"
+     ]
+    }
+   ],
+   "source": [
+    "#Took about total value because that's the whole point of the project\n",
+    "\n",
+    "X = data[['bedrooms', 'bathrooms', 'living_area',\n",
+    "       'half_baths', 'construction_quality',\n",
+    "       'condition_score', 'garage_type', 'finished_basement_No', 'total_land',\n",
+    "       'zipcodes', 'house_age']]\n",
+    "y = data['Inflation_Adj_Cost1'].values.reshape(-1, 1)\n",
+    "print(X.shape, y.shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "       bedrooms  bathrooms  living_area  half_baths  construction_quality  \\\n",
+      "7229          4          2         2467           1                     7   \n",
+      "8430          3          2         2112           0                     5   \n",
+      "6081          3          1         1500           1                     4   \n",
+      "6620          3          1         1160           0                     5   \n",
+      "8616          4          1         2120           2                     7   \n",
+      "9618          6          2         4842           2                     7   \n",
+      "947           3          1         1468           0                     5   \n",
+      "8349          3          1         1788           1                     6   \n",
+      "3489          4          2         2162           1                     7   \n",
+      "11692         4          1         1440           1                     5   \n",
+      "1090          3          1         1320           1                     5   \n",
+      "4356          3          1         1314           1                     4   \n",
+      "7588          4          3         3854           0                     7   \n",
+      "2843          3          2         2767           1                     8   \n",
+      "10462         4          2         2016           1                     7   \n",
+      "5221          1          1          520           0                     4   \n",
+      "7737          3          1         2160           1                     7   \n",
+      "5172          3          1         1148           0                     4   \n",
+      "4176          3          1         1526           1                     6   \n",
+      "467           3          1         1200           0                     5   \n",
+      "2632          3          1         1248           0                     5   \n",
+      "7056          4          2         2766           1                     7   \n",
+      "9425          3          1         1696           1                     5   \n",
+      "416           4          1         2030           1                     5   \n",
+      "2525          2          1          840           0                     4   \n",
+      "4716          3          1         2052           1                     4   \n",
+      "6910          3          2         2881           1                     7   \n",
+      "8795          4          1         1490           1                     6   \n",
+      "7745          3          3         2052           1                     6   \n",
+      "6052          3          1         1064           0                     4   \n",
+      "...         ...        ...          ...         ...                   ...   \n",
+      "7784          4          2         2340           1                     7   \n",
+      "8234          3          2         2009           0                     4   \n",
+      "3531          4          2         2656           1                     7   \n",
+      "10775         3          1         1324           0                     5   \n",
+      "11698         3          1         1520           1                     6   \n",
+      "8764          3          2         1574           0                     6   \n",
+      "3473          4          2         1998           1                     7   \n",
+      "1157          5          3         3575           0                     6   \n",
+      "11540         4          2         1860           0                     6   \n",
+      "2428          3          2         1560           0                     5   \n",
+      "180           3          2         1896           0                     7   \n",
+      "12076         3          1         1248           1                     6   \n",
+      "4319          5          1         1613           1                     6   \n",
+      "4730          3          1         1066           0                     4   \n",
+      "5187          2          1         1053           0                     4   \n",
+      "9709          2          1         1650           0                     5   \n",
+      "8698          3          2         1801           0                     6   \n",
+      "6788          2          2         2932           0                     6   \n",
+      "8274          3          1         1432           1                     6   \n",
+      "689           3          1         1452           0                     5   \n",
+      "9772          4          2         2446           1                     8   \n",
+      "8963          3          2         1963           1                     6   \n",
+      "4602          3          1         1134           1                     4   \n",
+      "5727          3          1         1638           1                     4   \n",
+      "8016          2          1         1008           0                     4   \n",
+      "8076          3          1         1299           1                     6   \n",
+      "8370          4          2         3080           1                     8   \n",
+      "1273          4          1         1744           1                     6   \n",
+      "11734         3          1         1832           1                     6   \n",
+      "11227         3          1         1560           1                     7   \n",
+      "\n",
+      "       condition_score  garage_type  finished_basement_No  total_land  \\\n",
+      "7229                 6            5                     1       17498   \n",
+      "8430                 5            5                     1       64468   \n",
+      "6081                 6            2                     2       21900   \n",
+      "6620                 5            5                     2       16350   \n",
+      "8616                 5            4                     2       17346   \n",
+      "9618                 6            5                     1       23650   \n",
+      "947                  6            5                     2       10478   \n",
+      "8349                 5            5                     2       17064   \n",
+      "3489                 6            5                     2       13200   \n",
+      "11692                5            5                     2       13500   \n",
+      "1090                 6            5                     2        8850   \n",
+      "4356                 6            2                     1        7680   \n",
+      "7588                 6            5                     1       37614   \n",
+      "2843                 7            5                     1        7187   \n",
+      "10462                6            5                     2       14630   \n",
+      "5221                 6            1                     2        5382   \n",
+      "7737                 5            5                     2       16353   \n",
+      "5172                 5            2                     2        9000   \n",
+      "4176                 5            5                     1       10950   \n",
+      "467                  5            2                     2        7850   \n",
+      "2632                 6            5                     2       11900   \n",
+      "7056                 6            5                     1       17498   \n",
+      "9425                 6            5                     2       14625   \n",
+      "416                  5            5                     2        7875   \n",
+      "2525                 5            5                     2        6550   \n",
+      "4716                 6            2                     2        9800   \n",
+      "6910                 5            5                     1        6303   \n",
+      "8795                 5            5                     2       17632   \n",
+      "7745                 6            5                     2       16892   \n",
+      "6052                 5            2                     2        7500   \n",
+      "...                ...          ...                   ...         ...   \n",
+      "7784                 5            5                     2       16160   \n",
+      "8234                 5            5                     1       48351   \n",
+      "3531                 6            5                     2       10125   \n",
+      "10775                6            5                     2        7200   \n",
+      "11698                5            5                     2       12800   \n",
+      "8764                 5            5                     2       15200   \n",
+      "3473                 6            5                     2       11100   \n",
+      "1157                 6            2                     2        7750   \n",
+      "11540                5            5                     1       15000   \n",
+      "2428                 5            5                     1        6240   \n",
+      "180                  6            5                     2       12000   \n",
+      "12076                5            5                     2       21257   \n",
+      "4319                 6            5                     2        9288   \n",
+      "4730                 5            2                     2        7370   \n",
+      "5187                 5            2                     2        9000   \n",
+      "9709                 5            2                     1        9150   \n",
+      "8698                 5            3                     2       39772   \n",
+      "6788                 6            5                     1       13503   \n",
+      "8274                 5            5                     2       16000   \n",
+      "689                  5            2                     2        6750   \n",
+      "9772                 7            5                     2       14720   \n",
+      "8963                 5            5                     2       16080   \n",
+      "4602                 5            2                     2        7000   \n",
+      "5727                 5            2                     2       10050   \n",
+      "8016                 5            2                     2       11300   \n",
+      "8076                 5            5                     2       15931   \n",
+      "8370                 5            5                     2       22186   \n",
+      "1273                 6            5                     2        8000   \n",
+      "11734                5            5                     2       11550   \n",
+      "11227                5            5                     2       10030   \n",
+      "\n",
+      "       zipcodes  house_age  \n",
+      "7229          3         29  \n",
+      "8430          3         72  \n",
+      "6081          2         64  \n",
+      "6620          3         64  \n",
+      "8616          3         54  \n",
+      "9618          4         44  \n",
+      "947           6         66  \n",
+      "8349          3         52  \n",
+      "3489          6         54  \n",
+      "11692         1         50  \n",
+      "1090          6         64  \n",
+      "4356          2         73  \n",
+      "7588          3         30  \n",
+      "2843          6          5  \n",
+      "10462         4         54  \n",
+      "5221          2         98  \n",
+      "7737          3         51  \n",
+      "5172          2         64  \n",
+      "4176          2         80  \n",
+      "467           6         73  \n",
+      "2632          6         64  \n",
+      "7056          3         32  \n",
+      "9425          4         59  \n",
+      "416           6         62  \n",
+      "2525          6         73  \n",
+      "4716          2         98  \n",
+      "6910          3         14  \n",
+      "8795          3         59  \n",
+      "7745          3         52  \n",
+      "6052          2         62  \n",
+      "...         ...        ...  \n",
+      "7784          3         46  \n",
+      "8234          3         67  \n",
+      "3531          6         50  \n",
+      "10775         4         71  \n",
+      "11698         1         49  \n",
+      "8764          3         61  \n",
+      "3473          6         58  \n",
+      "1157          6         67  \n",
+      "11540         1         48  \n",
+      "2428          6         72  \n",
+      "180           6         51  \n",
+      "12076         5         64  \n",
+      "4319          2         63  \n",
+      "4730          2         64  \n",
+      "5187          2         78  \n",
+      "9709          4         70  \n",
+      "8698          6         60  \n",
+      "6788          3         20  \n",
+      "8274          3         53  \n",
+      "689           6         76  \n",
+      "9772          4         60  \n",
+      "8963          3         60  \n",
+      "4602          2         66  \n",
+      "5727          2         79  \n",
+      "8016          3         83  \n",
+      "8076          3         60  \n",
+      "8370          3         41  \n",
+      "1273          6         69  \n",
+      "11734         1         54  \n",
+      "11227         6         57  \n",
+      "\n",
+      "[5991 rows x 11 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Split the data into training and testing\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "\n",
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)\n",
+    "### END SOLUTION\n",
+    "print(X_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.preprocessing import StandardScaler\n",
+    "\n",
+    "# Create a StandardScater model and fit it to the training data\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "X_scaler = StandardScaler().fit(X_train)\n",
+    "y_scaler = StandardScaler().fit(y_train)\n",
+    "### END SOLUTION'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[ 1.03068326  0.78511202  0.79480649 ...  0.22199619 -0.66333322\n",
+      "  -1.5351494 ]\n",
+      " [-0.3339186   0.78511202  0.34406339 ...  3.90836965 -0.66333322\n",
+      "   0.46348832]\n",
+      " [-0.3339186  -0.74800601 -0.43299232 ...  0.56748088 -1.23218941\n",
+      "   0.09164874]\n",
+      " ...\n",
+      " [ 1.03068326 -0.74800601 -0.1231858  ... -0.52344079  1.04323534\n",
+      "   0.32404848]\n",
+      " [-0.3339186  -0.74800601 -0.0114523  ... -0.2448241  -1.8010456\n",
+      "  -0.37315073]\n",
+      " [-0.3339186  -0.74800601 -0.35681039 ... -0.36411914  1.04323534\n",
+      "  -0.23371089]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Transform the training and testing data using the X_scaler and y_scaler models\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "X_train_scaled = X_scaler.transform(X_train)\n",
+    "X_test_scaled = X_scaler.transform(X_test)\n",
+    "y_train_scaled = y_scaler.transform(y_train)\n",
+    "y_test_scaled = y_scaler.transform(y_test)\n",
+    "### END SOLUTION\n",
+    "print(X_train_scaled)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "LinearRegression(copy_X=True, fit_intercept=True, n_jobs=None, normalize=False)"
+      ]
+     },
+     "execution_count": 27,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Create a LinearRegression model and fit it to the scaled training data\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "from sklearn.linear_model import LinearRegression\n",
+    "model = LinearRegression()\n",
+    "model.fit(X_train_scaled, y_train_scaled)\n",
+    "### END SOLUTION"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# Make predictions using the X_test_scaled data\n",
+    "# Plot y_test_scaled vs y_test_scaled\n",
+    "# Scatter plot y_test_scaled vs predictions\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "predictions = model.predict(X_test_scaled)\n",
+    "# model.fit(X_train_scaled, y_train_scaled)\n",
+    "plt.scatter(model.predict(X_train_scaled), model.predict(X_train_scaled) - y_train_scaled, c=\"blue\", label=\"Training Data\")\n",
+    "plt.scatter(model.predict(X_test_scaled), model.predict(X_test_scaled) - y_test_scaled, c=\"orange\", label=\"Testing Data\")\n",
+    "plt.legend()\n",
+    "plt.hlines(y=0, xmin=y_test_scaled.min(), xmax=y_test_scaled.max())\n",
+    "plt.title(\"Residual Plot\")\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "MSE: 0.4443193870274427, R2: 0.5874345362972038\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Used X_test_scaled, y_test_scaled, and model.predict(X_test_scaled) to calculate MSE and R2\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "from sklearn.metrics import mean_squared_error\n",
+    "\n",
+    "MSE = mean_squared_error(y_test_scaled, predictions)\n",
+    "r2 = model.score(X_test_scaled, y_test_scaled)\n",
+    "### END SOLUTION\n",
+    "\n",
+    "print(f\"MSE: {MSE}, R2: {r2}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "MSE: 0.4463913478900099, R2: 0.5855106510943593\n"
+     ]
+    }
+   ],
+   "source": [
+    "# LASSO model\n",
+    "# Note: Use an alpha of .01 when creating the model for this activity\n",
+    "from sklearn.linear_model import Lasso\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "lasso = Lasso(alpha=.01).fit(X_train_scaled, y_train_scaled)\n",
+    "\n",
+    "predictions = lasso.predict(X_test_scaled)\n",
+    "\n",
+    "MSE = mean_squared_error(y_test_scaled, predictions)\n",
+    "r2 = lasso.score(X_test_scaled, y_test_scaled)\n",
+    "### END SOLUTION\n",
+    "\n",
+    "print(f\"MSE: {MSE}, R2: {r2}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "MSE: 0.4443192719521444, R2: 0.5874346431484807\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Ridge model\n",
+    "# Note: Use an alpha of .01 when creating the model for this activity\n",
+    "from sklearn.linear_model import Ridge\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "ridge = Ridge(alpha=.01).fit(X_train_scaled, y_train_scaled)\n",
+    "\n",
+    "predictions = ridge.predict(X_test_scaled)\n",
+    "\n",
+    "MSE = mean_squared_error(y_test_scaled, predictions)\n",
+    "r2 = ridge.score(X_test_scaled, y_test_scaled)\n",
+    "### END SOLUTION\n",
+    "\n",
+    "print(f\"MSE: {MSE}, R2: {r2}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "MSE: 0.4448783271418033, R2: 0.5869155416411165\n"
+     ]
+    }
+   ],
+   "source": [
+    "# ElasticNet model\n",
+    "# Note: Use an alpha of .01 when creating the model for this activity\n",
+    "from sklearn.linear_model import ElasticNet\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "elasticnet = ElasticNet(alpha=.01).fit(X_train_scaled, y_train_scaled)\n",
+    "\n",
+    "predictions = elasticnet.predict(X_test_scaled)\n",
+    "\n",
+    "MSE = mean_squared_error(y_test_scaled, predictions)\n",
+    "r2 = elasticnet.score(X_test_scaled, y_test_scaled)\n",
+    "### END SOLUTION\n",
+    "\n",
+    "print(f\"MSE: {MSE}, R2: {r2}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "MSE: 0.4448783271418033, R2: 0.5869155416411165\n"
+     ]
+    }
+   ],
+   "source": [
+    "from sklearn.linear_model import ElasticNet\n",
+    "\n",
+    "### BEGIN SOLUTION\n",
+    "elasticnet = ElasticNet(alpha=.01).fit(X_train_scaled, y_train_scaled)\n",
+    "\n",
+    "predictions = elasticnet.predict(X_test_scaled)\n",
+    "\n",
+    "MSE = mean_squared_error(y_test_scaled, predictions)\n",
+    "r2 = elasticnet.score(X_test_scaled, y_test_scaled)\n",
+    "### END SOLUTION\n",
+    "\n",
+    "print(f\"MSE: {MSE}, R2: {r2}\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Index(['parcel', 'bedrooms', 'bathrooms', 'living_area', 'total_value',\n",
+       "       'half_baths', 'construction_quality', 'condition_score', 'garage_type',\n",
+       "       'finished_basement_No', 'total_land', 'zipcodes', 'house_age',\n",
+       "       'Inflation_Adj_Cost1', 'Inflation_Adj_Cost2'],\n",
+       "      dtype='object')"
+      ]
+     },
+     "execution_count": 34,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.columns"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 1. bedrooms\n",
+    "# 2. bathrooms\n",
+    "# 3. living_area\n",
+    "# 5. half_baths\n",
+    "# 6. construction_quality\n",
+    "# 7. condition_score\n",
+    "# 8. garage_type\n",
+    "# 9. finished_basement_No \n",
+    "# 10. total_land\n",
+    "# 11. zipcodes\n",
+    "# 12. house_age"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([217774.82777993])"
+      ]
+     },
+     "execution_count": 75,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Sample = np.array([[3,1,1932,1,5,6,2,2,10800,6,71]])\n",
+    "SS = X_scaler.transform(Sample)\n",
+    "SS\n",
+    "Outcome = y_scaler.inverse_transform(elasticnet.predict(SS))\n",
+    "\n",
+    "Outcome"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## "
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

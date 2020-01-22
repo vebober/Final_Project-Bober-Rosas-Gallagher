@@ -1,0 +1,19 @@
+AA / EXCELLENT+,10,,,EXCELLENT,8,,,,,,,,
+A+ / EXCELLENT,9,,,VERY-GOOD,7,,,No,2,,,44022,9
+A / VERY-GOOD,8,,,GOOD,6,,,0,1,,,44121,8
+B+ / GOOD+,7,,,AVERAGE,5,,,^(YES),,,,44122,7
+B / GOOD,6,,,FAIR,4,,,,,,,44124,6
+C+ / AVERAGE+,5,,,POOR,3,,,,,,,44136,5
+C / AVERAGE,4,,,VERY-POOR,2,,,,,,,44140,4
+D+ / POOR+,3,,,UNSOUND,1,,,,,,,44143,3
+D / POOR,2,,,,,,,,,,,44146,2
+E / VERY-POOR,1,,,,,,,,,,,44149,1
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+ATTACHED,5,,,,,,,,,,,,
+BUILT-IN,4,,,,,,,,,,,,
+BASEMENT,3,,,,,,,,,,,,
+DETACHED,2,,,,,,,,,,,,
+NONE,1,,,,,,,,,,,,
