@@ -45,27 +45,32 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-bedrooms = 3
-bathrooms = 1
-half_baths = 1
-living_area = 1932
-construction_quality = 5
-condition_score = 6
-garage_type = 2
-finished_basement = 2
-total_land = 10800
-house_age = 71
+##THIS IS WHERE THE WORK NEEDS TO BE DONE
 
-my_list = [bedrooms, bathrooms, half_baths, living_area, construction_quality, condition_score,
-garage_type, finished_basement, total_land, house_age]
+@app.route("/Calculator")
+def Calculator():
+    bedrooms = 3
+    bathrooms = 1
+    half_baths = 1
+    living_area = 1932
+    construction_quality = 5
+    condition_score = 6
+    garage_type = 2
+    finished_basement = 2
+    total_land = 10800
+    house_age = 71
 
-Sample= [np.asarray(my_list)]
-SS = X_scaler.transform(Sample)
-SS
-Outcome = y_scaler.inverse_transform(elasticnet.predict(SS))
-print("YOUR PRICE IS ")
-print(Outcome)
+    my_list = [bedrooms, bathrooms, half_baths, living_area, construction_quality, condition_score,
+    garage_type, finished_basement, total_land, house_age]
 
+    Sample= [np.asarray(my_list)]
+    SS = X_scaler.transform(Sample)
+    SS
+    Outcome = y_scaler.inverse_transform(elasticnet.predict(SS))
+    print("YOUR PRICE IS ")
+    print(Outcome)
+
+    return jsonify(Outcome)
 
 if __name__ == "__main__":
     app.run()
