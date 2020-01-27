@@ -7,6 +7,7 @@ from sklearn.linear_model import ElasticNet
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from flask import Flask, jsonify, render_template
 
 # DATA CLEANING
 data = pd.read_csv('data/The_Actual_Final_Dataset2.csv')
@@ -37,6 +38,13 @@ r2 = elasticnet.score(X_test_scaled, y_test_scaled)
 # USING INPUT DATA (Samples here)
 # We need to change these variables to the things that people input 
 
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
 bedrooms = 3
 bathrooms = 1
 half_baths = 1
@@ -57,3 +65,10 @@ SS
 Outcome = y_scaler.inverse_transform(elasticnet.predict(SS))
 print("YOUR PRICE IS ")
 print(Outcome)
+
+
+if __name__ == "__main__":
+    app.run()
+
+
+
