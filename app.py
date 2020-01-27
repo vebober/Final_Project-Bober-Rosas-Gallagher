@@ -47,6 +47,12 @@ def index():
 
 ##THIS IS WHERE THE WORK NEEDS TO BE DONE
 
+# 1. Figure out how to have the numbers they input change the variables that go into the predictor
+# 2. Figure out how to print the outcome in the box on the right side
+# 3. Make tabs that link to charts we want to show that are based off the final dataset 
+# 4. Make it all look better
+
+
 @app.route("/Calculator")
 def Calculator():
     bedrooms = 3
