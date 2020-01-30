@@ -17,14 +17,14 @@ document.getElementById("filter-btn").onclick = function() {
     condition,garage,basement,land,age];
     console.log(final_list);
     
-    var load = List<Integer> list11 =Arrays.stream(final_list).boxed().collect(Collectors.toList()); 
+    var load  = final_list.join(); 
     console.log(load)
 
     $.get($SCRIPT_ROOT + `/Calculator`, {
-        ml_input: JSON.stringify(load)
+        input: JSON.stringify(load)
     }, function(data){
-        console.log(data.result)
-        $( "#myText" ).append("h6").text(data.result);
+        console.log(data)
+        $( "#myText" ).append("h6").text(data);
     });
 }
 

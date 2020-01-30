@@ -66,19 +66,25 @@ def Calculator():
     # finished_basement = 2
     # total_land = 10800
     # house_age = 71
-
+    test = (1,2,3,4)
+    print(test)
     # my_list = [bedrooms, bathrooms, half_baths, living_area, construction_quality, condition_score,
     # garage_type, finished_basement, total_land, house_age]
-    ml_input = json.loads(request.args.get('wordlist'))
-    my_list = list(map(int, ml_input))
-
+    ml_input = (json.loads(request.args.get('input')))
+    ml_input = ml_input.split(",")
+    # ml_input = request.form.getlist('wordlist[]')
+    print(ml_input)
+    # my_list = list(map(float, ml_input))
+    my_list = [float(i) for i in ml_input]
+    print(my_list)
     Sample= [np.asarray(my_list)]
     SS = X_scaler.transform(Sample)
     SS
     Outcome = y_scaler.inverse_transform(elasticnet.predict(SS))
     print("YOUR PRICE IS ")
     print(Outcome)
-    Outcome = str(Outcome)
+    Outcome = float(Outcome)
+    Outcome = f'${Outcome:.2f}'
     return jsonify(Outcome)
 
 if __name__ == "__main__":
