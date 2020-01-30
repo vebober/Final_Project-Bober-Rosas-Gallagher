@@ -2,12 +2,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import matplotlib.image as mpimg 
+import json
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import ElasticNet
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template,request
 
 # DATA CLEANING
 data = pd.read_csv('data/The_Actual_Final_Dataset2.csv')
@@ -55,19 +56,21 @@ def index():
 
 @app.route("/Calculator")
 def Calculator():
-    bedrooms = 3
-    bathrooms = 1
-    half_baths = 1
-    living_area = 1932
-    construction_quality = 5
-    condition_score = 6
-    garage_type = 2
-    finished_basement = 2
-    total_land = 10800
-    house_age = 71
+    # bedrooms = 3
+    # bathrooms = 1
+    # half_baths = 1
+    # living_area = 1932
+    # construction_quality = 5
+    # condition_score = 6
+    # garage_type = 2
+    # finished_basement = 2
+    # total_land = 10800
+    # house_age = 71
 
-    my_list = [bedrooms, bathrooms, half_baths, living_area, construction_quality, condition_score,
-    garage_type, finished_basement, total_land, house_age]
+    # my_list = [bedrooms, bathrooms, half_baths, living_area, construction_quality, condition_score,
+    # garage_type, finished_basement, total_land, house_age]
+    ml_input = json.loads(request.args.get('wordlist'))
+    my_list = list(map(int, ml_input))
 
     Sample= [np.asarray(my_list)]
     SS = X_scaler.transform(Sample)
@@ -75,7 +78,7 @@ def Calculator():
     Outcome = y_scaler.inverse_transform(elasticnet.predict(SS))
     print("YOUR PRICE IS ")
     print(Outcome)
-
+    Outcome = str(Outcome)
     return jsonify(Outcome)
 
 if __name__ == "__main__":

@@ -13,22 +13,32 @@ document.getElementById("filter-btn").onclick = function() {
     var land = document.getElementById("Total_Land_sq_").value;
     var age = document.getElementById("House_Age").value;
 
-    final_list = [bedrooms,full_bathrooms,half_bathrooms,living_area,quality,
+    var final_list = [bedrooms,full_bathrooms,half_bathrooms,living_area,quality,
     condition,garage,basement,land,age];
     console.log(final_list);
+    
+    var load = List<Integer> list11 =Arrays.stream(final_list).boxed().collect(Collectors.toList()); 
+    console.log(load)
+
+    $.get($SCRIPT_ROOT + `/Calculator`, {
+        ml_input: JSON.stringify(load)
+    }, function(data){
+        console.log(data.result)
+        $( "#myText" ).append("h6").text(data.result);
+    });
 }
 
-function sellprice(final_list) {
-    var outcome = document.getElementById("myText");
-    var url = `/Calculator${final_list}`;
+// function sellprice(final_list) {
+//     var outcome = document.getElementById("myText");
+//     var url = `/Calculator/${final_list}`;
 
-    d3.json(url).then(function (Outcome) {
+//     d3.json(url).then(function (Outcome) {
 
-        var data1 = Outcome;
-        outcome.html("");
+//         var data1 = Outcome;
+//         outcome.html("");
 
-        outcome.append(data1)
-    });
-};
+//         outcome.append(data1)
+//     });
+// };
 
-sellprice();
+// sellprice();
