@@ -46,35 +46,15 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-##THIS IS WHERE THE WORK NEEDS TO BE DONE
-
-# 1. Figure out how to have the numbers they input change the variables that go into the predictor
-# 2. Figure out how to print the outcome in the box on the right side
-# 3. Make tabs that link to charts we want to show that are based off the final dataset 
-# 4. Make it all look better
-
 
 @app.route("/Calculator")
 def Calculator():
-    # bedrooms = 3
-    # bathrooms = 1
-    # half_baths = 1
-    # living_area = 1932
-    # construction_quality = 5
-    # condition_score = 6
-    # garage_type = 2
-    # finished_basement = 2
-    # total_land = 10800
-    # house_age = 71
+
     test = (1,2,3,4)
     print(test)
-    # my_list = [bedrooms, bathrooms, half_baths, living_area, construction_quality, condition_score,
-    # garage_type, finished_basement, total_land, house_age]
     ml_input = (json.loads(request.args.get('input')))
     ml_input = ml_input.split(",")
-    # ml_input = request.form.getlist('wordlist[]')
     print(ml_input)
-    # my_list = list(map(float, ml_input))
     my_list = [float(i) for i in ml_input]
     print(my_list)
     Sample= [np.asarray(my_list)]
